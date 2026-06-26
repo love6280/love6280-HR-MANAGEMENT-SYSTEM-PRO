@@ -9,7 +9,7 @@ import { Bell, Clock, ShieldAlert, Award, FileText, Gift, Megaphone } from 'luci
 import Avatar from '../ui/Avatar';
 import { io } from 'socket.io-client';
 
-const Topbar = () => {
+const Topbar = ({ isCollapsed }) => {
   const user = useSelector(selectCurrentUser);
   const [time, setTime] = useState(new Date());
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -80,7 +80,7 @@ const Topbar = () => {
   };
 
   return (
-    <header className="fixed top-0 right-0 left-0 h-16 bg-[#0a0a1a]/40 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-6 z-20 transition-all duration-300">
+    <header className={`fixed top-0 right-0 h-16 bg-[#0a0a1a]/40 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-6 z-20 transition-all duration-300 ${isCollapsed ? 'left-[70px]' : 'left-[240px]'}`}>
       {/* Search space / Empty spacing for left shift */}
       <div className="flex-1" />
 

@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 
 const PageWrapper = ({ children }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <div className="min-h-screen flex w-full">
       {/* Sidebar navigation */}
-      <Sidebar />
+      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
       {/* Main viewport */}
-      <div className="flex-1 flex flex-col pl-[70px] transition-all duration-300">
+      <div className={`flex-1 flex flex-col ${isCollapsed ? 'pl-[70px]' : 'pl-[240px]'} transition-all duration-300`}>
         {/* Top Header bar */}
-        <Topbar />
+        <Topbar isCollapsed={isCollapsed} />
 
         {/* Page content view with transitions */}
         <main className="flex-1 pt-20 pb-10 px-6 overflow-y-auto max-w-7xl w-full mx-auto">
