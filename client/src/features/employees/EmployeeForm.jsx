@@ -109,6 +109,23 @@ const EmployeeForm = () => {
     ...(managerData?.data || []).map(e => ({ label: e.fullName, value: e._id }))
   ];
 
+  const designationOptions = [
+    { label: 'Select Designation', value: '' },
+    { label: 'Super Administrator', value: 'Super Administrator' },
+    { label: 'HR Manager', value: 'HR Manager' },
+    { label: 'Engineering Lead', value: 'Engineering Lead' },
+    { label: 'Senior Engineer', value: 'Senior Engineer' },
+    { label: 'Frontend Developer', value: 'Frontend Developer' },
+    { label: 'Backend Developer', value: 'Backend Developer' },
+    { label: 'Fullstack Developer', value: 'Fullstack Developer' },
+    { label: 'QA Engineer', value: 'QA Engineer' },
+    { label: 'Finance Lead', value: 'Finance Lead' },
+    { label: 'Marketing Executive', value: 'Marketing Executive' },
+    { label: 'Operations Associate', value: 'Operations Associate' },
+    { label: 'Product Manager', value: 'Product Manager' },
+    { label: 'UI/UX Designer', value: 'UI/UX Designer' }
+  ];
+
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
@@ -216,9 +233,9 @@ const EmployeeForm = () => {
                   error={errors.workInfo?.department}
                   {...register('workInfo.department', { required: 'Department is required' })}
                 />
-                <Input
+                <Select
                   label="Designation *"
-                  placeholder="e.g. Senior Frontend Engineer"
+                  options={designationOptions}
                   error={errors.workInfo?.designation}
                   {...register('workInfo.designation', { required: 'Designation is required' })}
                 />
