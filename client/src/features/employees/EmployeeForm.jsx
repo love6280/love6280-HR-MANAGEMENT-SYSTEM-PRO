@@ -17,13 +17,20 @@ const EmployeeForm = () => {
   const { data: deptData } = useGetDepartmentsQuery();
   const { data: managerData } = useGetEmployeesQuery({ limit: 100 });
 
-  const { register, handleSubmit, trigger, watch, formState: { errors } } = useForm({
+  const { register, handleSubmit, trigger, watch, setValue, formState: { errors } } = useForm({
     defaultValues: {
       personalInfo: { gender: 'Male', maritalStatus: 'Single', photo: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80' },
-      workInfo: { employmentType: 'Full-time', workLocation: 'Bangalore Office', shift: '09:00 - 18:00' },
+      workInfo: { employmentType: 'Full-time', workLocation: 'Bangalore Office', shift: '09:00 - 18:00', department: '', designation: '' },
       salaryInfo: { basic: 0, hra: 0, da: 0, conveyance: 0, medical: 0, specialAllowance: 0, otherAllowances: 0 }
     }
   });
+
+  const selectedDeptId = watch('workInfo.department');
+
+  // Clear designation if department changes
+  React.useEffect(() => {
+    setValue('workInfo.designation', '');
+  }, [selectedDeptId, setValue]);
 
   // Watch salary fields to calculate total CTC
   const salaryWatch = watch('salaryInfo');
@@ -109,21 +116,46 @@ const EmployeeForm = () => {
     ...(managerData?.data || []).map(e => ({ label: e.fullName, value: e._id }))
   ];
 
+  const designationsByDept = {
+    'Engineering': [
+      { label: 'Engineering Lead', value: 'Engineering Lead' },
+      { label: 'Senior Engineer', value: 'Senior Engineer' },
+      { label: 'Frontend Developer', value: 'Frontend Developer' },
+      { label: 'Backend Developer', value: 'Backend Developer' },
+      { label: 'Fullstack Developer', value: 'Fullstack Developer' },
+      { label: 'QA Engineer', value: 'QA Engineer' },
+      { label: 'UI/UX Designer', value: 'UI/UX Designer' },
+      { label: 'Product Manager', value: 'Product Manager' }
+    ],
+    'HR': [
+      { label: 'Super Administrator', value: 'Super Administrator' },
+      { label: 'HR Manager', value: 'HR Manager' },
+      { label: 'HR Associate', value: 'HR Associate' }
+    ],
+    'Finance': [
+      { label: 'Finance Lead', value: 'Finance Lead' },
+      { label: 'Financial Analyst', value: 'Financial Analyst' },
+      { label: 'Accountant', value: 'Accountant' }
+    ],
+    'Marketing': [
+      { label: 'Marketing Executive', value: 'Marketing Executive' },
+      { label: 'SEO Specialist', value: 'SEO Specialist' },
+      { label: 'Content Strategist', value: 'Content Strategist' }
+    ],
+    'Operations': [
+      { label: 'Operations Associate', value: 'Operations Associate' },
+      { label: 'Operations Lead', value: 'Operations Lead' },
+      { label: 'Office Administrator', value: 'Office Administrator' }
+    ]
+  };
+
+  const selectedDeptObj = (deptData?.data || []).find(d => d._id === selectedDeptId);
+  const selectedDeptName = selectedDeptObj ? selectedDeptObj.name : '';
+  const dynamicDesignations = selectedDeptName ? (designationsByDept[selectedDeptName] || []) : [];
+
   const designationOptions = [
-    { label: 'Select Designation', value: '' },
-    { label: 'Super Administrator', value: 'Super Administrator' },
-    { label: 'HR Manager', value: 'HR Manager' },
-    { label: 'Engineering Lead', value: 'Engineering Lead' },
-    { label: 'Senior Engineer', value: 'Senior Engineer' },
-    { label: 'Frontend Developer', value: 'Frontend Developer' },
-    { label: 'Backend Developer', value: 'Backend Developer' },
-    { label: 'Fullstack Developer', value: 'Fullstack Developer' },
-    { label: 'QA Engineer', value: 'QA Engineer' },
-    { label: 'Finance Lead', value: 'Finance Lead' },
-    { label: 'Marketing Executive', value: 'Marketing Executive' },
-    { label: 'Operations Associate', value: 'Operations Associate' },
-    { label: 'Product Manager', value: 'Product Manager' },
-    { label: 'UI/UX Designer', value: 'UI/UX Designer' }
+    { label: selectedDeptName ? 'Select Designation' : 'Please Select Department First', value: '' },
+    ...dynamicDesignations
   ];
 
   return (
