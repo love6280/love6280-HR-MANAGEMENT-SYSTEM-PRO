@@ -76,6 +76,9 @@ const Dashboard = () => {
 
   const PIE_COLORS = ['#10b981', '#8b5cf6', '#4f9eff', '#f59e0b', '#f43f5e'];
 
+  const canAccessEmployees = ['SuperAdmin', 'HRManager', 'TeamManager'].includes(user?.role);
+  const canAccessRecruitment = ['SuperAdmin', 'HRManager', 'TeamManager'].includes(user?.role);
+
   return (
     <div className="flex flex-col gap-6">
       {/* Welcome header & clock-in / quick options */}
@@ -159,6 +162,7 @@ const Dashboard = () => {
           change={metrics?.totalEmployees}
           icon={Users}
           color="blue"
+          onClick={canAccessEmployees ? () => navigate('/employees') : undefined}
         />
         <StatCard
           title="Present Today"
@@ -166,6 +170,7 @@ const Dashboard = () => {
           change={metrics?.presentToday}
           icon={CalendarCheck}
           color="green"
+          onClick={() => navigate('/attendance')}
         />
         <StatCard
           title="On Leave Today"
@@ -173,6 +178,7 @@ const Dashboard = () => {
           change={metrics?.onLeaveToday}
           icon={CalendarOff}
           color="rose"
+          onClick={() => navigate('/leaves')}
         />
         <StatCard
           title="Open Positions"
@@ -180,6 +186,7 @@ const Dashboard = () => {
           change={metrics?.openPositions}
           icon={Briefcase}
           color="purple"
+          onClick={canAccessRecruitment ? () => navigate('/recruitment') : undefined}
         />
       </div>
 

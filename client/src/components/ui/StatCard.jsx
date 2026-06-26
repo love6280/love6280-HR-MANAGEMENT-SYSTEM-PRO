@@ -9,6 +9,7 @@ const StatCard = ({
   change, // object: { value: number, type: 'up' | 'down' | 'neutral' }
   icon: Icon,
   color = 'blue', // 'blue' | 'purple' | 'green' | 'amber' | 'rose'
+  onClick,
 }) => {
   const glowShadows = {
     blue: 'shadow-[0_0_15px_rgba(79,158,255,0.25)] border-accent-primary/20',
@@ -27,7 +28,13 @@ const StatCard = ({
   };
 
   return (
-    <Card hover={true} className={`border ${glowShadows[color]} flex flex-col justify-between h-32`}>
+    <Card
+      hover={true}
+      onClick={onClick}
+      className={`border ${glowShadows[color]} flex flex-col justify-between h-32 transition-all duration-200 ${
+        onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.98] select-none' : ''
+      }`}
+    >
       <div className="flex items-start justify-between">
         <span className="text-text-secondary text-sm font-medium">{title}</span>
         {Icon && (
